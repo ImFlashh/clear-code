@@ -1,5 +1,8 @@
+import csv
 import re
 import operator
+
+import sys
 
 logs = """
 10.4.180.222 [28/Jan/2018:10:02:32 +0100] "GET http://clearcode.cc/ HTTP/1.1" 200 1080
@@ -20,10 +23,8 @@ https://docs.python.org/3/library/
 https://docs.python.org/3/library/
 
 """
-# spamwriter = csv.writer(sys.stdout)
 
-
-urls = re.findall(r'(?P<url>[a-z]*[a-z]+\.[a-z]+/*[a-z]*\.*[a-z]+)', logs)  # regex wyłapujacy tylko url
+urls = re.findall(r'(?P<url>[a-z]*[a-z]+\.[a-z]+/*[a-z]*\.*[a-z]+)', logs)
 
 dict = {}
 for url in urls:
@@ -32,8 +33,7 @@ for url in urls:
     else:
         dict[url] += 1
 
-sorted_dict = sorted(dict.items(), key=operator.itemgetter(1),
-                     reverse=True)  # sortowanie słownika według wartości malejąco
+spamwriter = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
 
-for element in sorted_dict:
-    print('"{}",{}'.format(element[0], element[1]))  # wyświetla url i liczbe wystąpień
+spamwriter.writerows(sorted(dict.items(),
+                            key=operator.itemgetter(1), reverse=True))
