@@ -28,10 +28,11 @@ urls = re.findall(r'(?P<url>[a-z]*[a-z]+\.[a-z]+/*[a-z]*\.*[a-z]+)', logs)
 
 dict = {}
 for url in urls:
-    if url not in dict:
-        dict.setdefault(url, 1)
-    else:
+    if url in dict:
         dict[url] += 1
+    else:
+        dict.setdefault(url, 1)
+
 
 spamwriter = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
 
